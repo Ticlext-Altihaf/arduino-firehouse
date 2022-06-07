@@ -7,13 +7,21 @@
 
 
 //MOTOR CONTROLLER
-int IN_1 = 4, IN_2 = 5, IN_3 = 13, IN_4 = 12;
+const int IN_1 = 4, IN_2 = 5, IN_3 = 13, IN_4 = 12;
 int ENA = 3, ENB = 11;
 
 //FIREHOSE CONTROLELR
 Servo myservo;
 int pos = 0;
 const int SERVO_FIREHOSE_PIN = 2;
+
+//Heat Sensor
+const int HEAT_SENSOR_PIN_1 = 7, HEAT_SENSOR_PIN_2 = 7;
+int HEAT_SENSOR_VALUE_1 = 0, HEAT_SENSOR_VALUE_2 = 0;
+
+//Pump Relay
+const int PUMP_RELAY_PIN = 8;
+
 void setup() {
   // initialize digital pin LED_BUILTIN as an output.
   pinMode(LED_BUILTIN, OUTPUT);
@@ -24,10 +32,25 @@ void setup() {
   pinMode(IN_4, OUTPUT);
   pinMode(ENA, OUTPUT);
   pinMode(ENB, OUTPUT);
+  pinMode(PUMP_RELAY_PIN, OUTPUT);
+  //Serial.begin(9600);
 }
 
 // the loop function runs over and over again forever
 void loop() {
+
+  digitalWrite(PUMP_RELAY_PIN, HIGH);
+  delay(5000);
+  digitalWrite(PUMP_RELAY_PIN, LOW);
+  delay(5000);
+  /*
+    HEAT_SENSOR_VALUE_1 = analogRead(HEAT_SENSOR_PIN_1);
+    HEAT_SENSOR_VALUE_2 = analogRead(HEAT_SENSOR_PIN_2);
+    Serial.print("TEMPRATURE_1:");
+    Serial.println(HEAT_SENSOR_VALUE_1);
+    Serial.print("TEMPRATURE_2:");
+    Serial.println(HEAT_SENSOR_VALUE_2);
+  */
   /*
      Servo loo
     for (pos = 0; pos <= 100; pos += 1) { // goes from 0 degrees to 180 degrees
@@ -42,24 +65,34 @@ void loop() {
   */
 
   /*
-   * 
-  analogWrite(ENA, 100); //ENA pin
-  analogWrite(ENB, 200); //ENB pin
-  digitalWrite(IN_1, HIGH);
-  digitalWrite(IN_2, LOW);
 
-  digitalWrite(IN_3, HIGH);
-  digitalWrite(IN_4, LOW);
-  delay(1000);
-
-  digitalWrite(IN_1, LOW);
-  digitalWrite(IN_2, HIGH);
-
-  digitalWrite(IN_3, LOW);
-  digitalWrite(IN_4, HIGH);
-  delay(1000);
+    analogWrite(ENA, 100); //ENA pin
+    analogWrite(ENB, 200); //ENB pin
+    digitalWrite(IN_1, HIGH);
+    digitalWrite(IN_2, LOW);
+    digitalWrite(IN_3, HIGH);
+    digitalWrite(IN_4, LOW);
+    delay(1000);
+    digitalWrite(IN_1, LOW);
+    digitalWrite(IN_2, HIGH);
+    digitalWrite(IN_3, LOW);
+    digitalWrite(IN_4, HIGH);
+    delay(1000);
   */
+
 }
 
 
-void move(
+void move(int direction, float force) {
+  //Controlling speed (0 = off and 255 = max speed)
+  int theForce = force * 255;
+  analogWrite(ENA, theForce); //ENA pin
+  analogWrite(ENB, theForce); //ENB pin
+  if (direction == 1) {
+    digitalWrite(IN_1, LOW);
+    digitalWrite(IN_2, HIGH);
+    digitalWrite(IN_3, LOW);
+    digitalWrite(IN_4, HIGH);
+  }
+
+}
