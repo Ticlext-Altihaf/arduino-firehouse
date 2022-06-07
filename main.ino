@@ -6,6 +6,9 @@
 //12 = 4
 
 
+//ADDR:98D3:41:F65D29
+
+
 //MOTOR CONTROLLER
 const int IN_1 = 4, IN_2 = 5, IN_3 = 13, IN_4 = 12;
 int ENA = 3, ENB = 11;
